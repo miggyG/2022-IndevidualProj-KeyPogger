@@ -19,10 +19,10 @@ from datetime import datetime
 
 # static variables
 
-EMAIL = "keypoggers@gmail.com"
-EMAILPASS = "ZDSBNJKHF!62ukzhgkuyfwuS@D%@!3ndhvgwe"
+EMAIL = "" #insert email that will send files
+EMAILPASS = "" # email sender password
 SECINDAY = 86400
-EMAILRECIVE = "keypogreciver@gmail.com"
+EMAILRECIVE = "" #email that will recive all files
 LOGGING = True
 
 
