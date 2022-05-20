@@ -5,8 +5,11 @@ This project is a keylogger that runs without the user being affected. It logs a
 
 ### Intended use:
 parents monitoring their childrens internet uses
+
 Schools monitoring students for innapropriate behavior
+
 Employers monitoring their employees to ensure work is being done
+
 
 ## Use of this application to spy on/moniter a non consenting person/persons is illegal and I am not responsible for use of the app that is not its intended purpose. 
 
