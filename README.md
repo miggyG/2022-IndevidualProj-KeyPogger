@@ -11,18 +11,18 @@ Employers monitoring their employees to ensure work is being done
 ##### Use of this application to spy on/moniter a non consenting person/persons is illegal and I am not responsible for use of the app that is not its intended purpose. 
 
 ### Installing and running this script(linux/mac)
-  `git clone https://github.com/miggyG/2022-IndevidualProj-KeyPogger`
-  `cd 2022-IndevidualProj-KeyPogger/src`
-  `nano PrettyKeyLogger.py`
+1. `git clone https://github.com/miggyG/2022-IndevidualProj-KeyPogger`
+2. `cd 2022-IndevidualProj-KeyPogger/src`
+3. `nano PrettyKeyLogger.py`
   
-  Input the appropriate info inbetween each quotation mark
-  Example:
-  EMAIL = "examplesender@gmail.com" #insert email that will send files 
-  EMAILPASS = "secretpassword" # email sender password
-  TIMER = 86400 # time is automatically set for 24 hrs
-  EMAILRECIVE = "examplereciver@gmail.com" #email that will recive all files
-  Save and exit
-  `python3 PrettyKeyLogger.py`
+Input the appropriate info inbetween each quotation mark
+Example:
+EMAIL = "examplesender@gmail.com" #insert email that will send files 
+EMAILPASS = "secretpassword" # email sender password
+TIMER = 86400 # time is automatically set for 24 hrs
+EMAILRECIVE = "examplereciver@gmail.com" #email that will recive all files
+Save and exit
+`python3 PrettyKeyLogger.py`
   
 
 # Flow chart of how the App works
